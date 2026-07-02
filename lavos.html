@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lavos · Coffee & Story</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome 6 (Free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        /* ---------- RESET & BASE ---------- */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #faf6f0;
+            --brown-dark: #2c1810;
+            --brown-rich: #4a2c1a;
+            --brown-mid: #7a5a3e;
+            --brown-light: #b8957a;
+            --gold: #c9a87c;
+            --gold-soft: #e8d5b5;
+            --text-light: #f5ede4;
+            --text-dark: #2c1810;
+            --shadow: 0 20px 60px rgba(44, 24, 16, 0.15);
+            --radius: 20px;
+            --transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ---------- SCROLLBAR ---------- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--cream);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--brown-mid);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--brown-rich);
+        }
+
+        /* ---------- COFFEE BEAN BG ELEMENTS ---------- */
+        .bean-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.06;
+        }
+
+        .bean-bg span {
+            position: absolute;
+            display: block;
+            font-size: 4rem;
+            color: var(--brown-rich);
+            transform: rotate(var(--rot, 0deg));
+            animation: floatBean var(--dur, 20s) infinite alternate ease-in-out;
+        }
+
+        @keyframes floatBean {
+            0% {
+                transform: translate(0, 0) rotate(var(--rot, 0deg)) scale(1);
+            }
+            100% {
+                transform: translate(var(--tx, 40px), var(--ty, -40px)) rotate(calc(var(--rot, 0deg) + 20deg)) scale(1.05);
+            }
+        }
+
+        /* ---------- CONTAINER ---------- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ---------- HEADER / NAV ---------- */
+        .header {
+            padding: 28px 0 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(74, 44, 26, 0.08);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--brown-rich);
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--gold);
+            font-size: 1.6rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .nav-links a {
+            color: var(--brown-rich);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ---------- HERO ---------- */
+        .hero {
+            padding: 80px 0 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            color: var(--brown-dark);
+            margin-bottom: 12px;
+        }
+
+        .hero-content h1 .highlight {
+            color: var(--gold);
+            font-style: italic;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--brown-mid);
+            margin-bottom: 8px;
+            letter-spacing: 0.06em;
+        }
+
+        .hero-content .tagline {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--brown-mid);
+            max-width: 440px;
+            margin: 16px 0 32px;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 8px;
+        }
+
+        .hero-stats .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-stats .stat .num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--brown-rich);
+        }
+
+        .hero-stats .stat .label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--brown-light);
+            font-weight: 500;
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-visual .bean-ring {
+            position: absolute;
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            border: 1px solid rgba(201, 168, 124, 0.2);
+            animation: spin 40s linear infinite;
+            pointer-events: none;
+        }
+
+        .hero-visual .bean-ring::before {
+            content: '☕';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.4rem;
+            opacity: 0.15;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hero-visual .video-wrapper {
+            width: 100%;
+            max-width: 380px;
+            aspect-ratio: 9 / 16;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: var(--brown-dark);
+            position: relative;
+            z-index: 2;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .hero-visual .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ---------- JOURNEY / STORY SECTION ---------- */
+        .journey {
+            padding: 80px 0 60px;
+            border-top: 1px solid rgba(74, 44, 26, 0.06);
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--brown-dark);
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .section-title em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 40px;
+            align-items: start;
+        }
+
+        .story-text p {
+            font-size: 1.05rem;
+            color: var(--brown-mid);
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .story-text p strong {
+            color: var(--brown-rich);
+            font-weight: 600;
+        }
+
+        .story-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            border-left: 3px solid var(--gold);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(6px);
+            box-shadow: 0 8px 24px rgba(44, 24, 16, 0.06);
+        }
+
+        .timeline-item .icon {
+            font-size: 1.4rem;
+            color: var(--gold);
+            min-width: 40px;
+            padding-top: 2px;
+        }
+
+        .timeline-item .content h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--brown-dark);
+            margin-bottom: 2px;
+        }
+
+        .timeline-item .content p {
+            font-size: 0.92rem;
+            color: var(--brown-mid);
+            font-weight: 300;
+            margin: 0;
+        }
+
+        /* ---------- OFFERINGS ---------- */
+        .offerings {
+            padding: 60px 0 80px;
+            background: var(--brown-dark);
+            color: var(--text-light);
+            position: relative;
+        }
+
+        .offerings .section-label {
+            color: var(--gold-soft);
+        }
+
+        .offerings .section-title {
+            color: var(--text-light);
+        }
+
+        .offerings .section-title em {
+            color: var(--gold);
+        }
+
+        .offer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .offer-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(2px);
+            padding: 32px 28px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform 0.4s, background 0.4s, border-color 0.4s;
+            text-align: center;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--gold);
+        }
+
+        .offer-card .icon {
+            font-size: 2.4rem;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+
+        .offer-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        .offer-card p {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.65);
+            line-height: 1.7;
+        }
+
+        /* ---------- QUOTE / VISION ---------- */
+        .vision {
+            padding: 80px 0;
+            text-align: center;
+            background: var(--cream);
+        }
+
+        .vision blockquote {
+            max-width: 740px;
+            margin: 0 auto;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 400;
+            line-height: 1.4;
+            color: var(--brown-dark);
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .vision blockquote::before {
+            content: '\201C';
+            font-size: 5rem;
+            color: var(--gold);
+            position: absolute;
+            top: -30px;
+            left: -10px;
+            opacity: 0.3;
+        }
+
+        .vision .attribution {
+            margin-top: 24px;
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--brown-mid);
+            letter-spacing: 0.04em;
+        }
+
+        .vision .attribution i {
+            color: var(--gold);
+            margin-right: 6px;
+        }
+
+        /* ---------- FOOTER ---------- */
+        .footer {
+            padding: 40px 0 32px;
+            border-top: 1px solid rgba(74, 44, 26, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer .copy {
+            font-size: 0.85rem;
+            color: var(--brown-light);
+            font-weight: 300;
+        }
+
+        .footer .copy i {
+            color: var(--gold);
+            margin: 0 4px;
+        }
+
+        .footer .socials {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer .socials a {
+            color: var(--brown-mid);
+            font-size: 1.2rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .footer .socials a:hover {
+            color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1024px) {
+            .hero-content h1 {
+                font-size: 3.2rem;
+            }
+            .story-grid {
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 40px 0 40px;
+                min-height: auto;
+                text-align: center;
+            }
+
+            .hero-content .tagline {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual .video-wrapper {
+                max-width: 300px;
+            }
+
+            .story-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .offer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .section-title {
+                font-size: 2.4rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav-links {
+                gap: 20px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .hero-content h1 {
+                font-size: 2.4rem;
+            }
+
+            .offer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                gap: 24px;
+            }
+
+            .hero-stats .stat .num {
+                font-size: 1.6rem;
+            }
+
+            .timeline-item {
+                padding: 12px 16px;
+            }
+
+            .vision blockquote {
+                font-size: 1.6rem;
+            }
+
+            .footer {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== COFFEE BEAN DECORATIVE BG ===== -->
+    <div class="bean-bg" aria-hidden="true">
+        <span style="top:8%;left:4%;font-size:3.6rem;--rot:-12deg;--dur:22s;--tx:50px;--ty:-30px;">☕</span>
+        <span style="top:22%;right:6%;font-size:5rem;--rot:18deg;--dur:26s;--tx:-60px;--ty:40px;">☕</span>
+        <span style="bottom:30%;left:2%;font-size:4.4rem;--rot:6deg;--dur:20s;--tx:70px;--ty:-20px;">☕</span>
+        <span style="bottom:15%;right:3%;font-size:3.8rem;--rot:-24deg;--dur:24s;--tx:-40px;--ty:50px;">☕</span>
+        <span style="top:60%;left:12%;font-size:2.8rem;--rot:34deg;--dur:18s;--tx:30px;--ty:-60px;">☕</span>
+        <span style="top:45%;right:15%;font-size:3.2rem;--rot:-8deg;--dur:28s;--tx:-50px;--ty:-30px;">☕</span>
+        <span style="top:75%;left:50%;font-size:4.8rem;--rot:42deg;--dur:30s;--tx:40px;--ty:20px;">☕</span>
+    </div>
+
+    <!-- ===== MAIN ===== -->
+    <div class="container">
+
+        <!-- HEADER -->
+        <header class="header">
+            <a href="#" class="logo">
+                <i class="fas fa-mug-hot"></i> Lavos
+            </a>
+            <nav class="nav-links">
+                <a href="#story">Story</a>
+                <a href="#offerings">Offerings</a>
+                <a href="#vision">Vision</a>
+            </nav>
+        </header>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-content">
+                <p class="subtitle">— From the street to your cup</p>
+                <h1>
+                    Crafting <br />
+                    <span class="highlight">Lavos</span> · A<br />
+                    Coffee Journey
+                </h1>
+                <p class="tagline">
+                    Born on the pavements, brewed with purpose. Every cup tells the
+                    story of resilience, passion, and the pursuit of something
+                    extraordinary.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="num">0</span>
+                        <span class="label">Starting point</span>
+                    </div>
+                    <div class="stat">
+                        <span class="num">∞</span>
+                        <span class="label">Cups brewed</span>
+                    </div>
+                    <div class="stat">
+                        <span class="num">1</span>
+                        <span class="label">Vision</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="bean-ring"></div>
+                <div class="video-wrapper">
+                    <!-- Replace src with your video file 
+                    <video
+                    src="vid.mp4"
+                    muted
+                    autoplay
+                    loop
+                    playsinline
+                    poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='700'%3E%3Crect width='400' height='700' fill='%232c1810'/%3E%3Ctext x='50%25' y='50%25' font-size='28' fill='%23c9a87c' text-anchor='middle' dy='.3em' font-family='serif'%3ELavos%3C/text%3E%3C/svg%3E"
+                    ></video> 
+                    </div>-->
+                
+                <video controls autoplay
+                    loop
+                    playsinline poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='700'%3E%3Crect width='400' height='700' fill='%232c1810'/%3E%3Ctext x='50%25' y='50%25' font-size='28' fill='%23c9a87c' text-anchor='middle' dy='.3em' font-family='serif'%3ELavos%3C/text%3E%3C/svg%3E" preload="metadata">
+                <source src="vid.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+                </video>
+                </div>
+            </div>
+        </section>
+
+        <!-- STORY / JOURNEY -->
+        <section class="journey" id="story">
+            <p class="section-label"><i class="fas fa-seedling" style="margin-right:8px;"></i> The Journey</p>
+            <h2 class="section-title">
+                From <em>pavement</em> <br />to promise
+            </h2>
+
+            <div class="story-grid">
+                <div class="story-text">
+                    <p>
+                        <strong>Lavos</strong> wasn't born in a boardroom — it was born on a
+                        street corner, with a folding table, a thermos, and a stubborn belief
+                        that <strong>coffee could be more</strong> than just a morning ritual.
+                    </p>
+                    <p>
+                        My friend started with a cart, a smile, and the freshest beans he could
+                        find. No big budget, no fancy shop — just <strong>pure, unfiltered
+                        hustle</strong>. Muffins still warm from the oven, scones that crumbled
+                        just right, and coffee that made strangers stop and stay.
+                    </p>
+                    <p>
+                        Every day was a lesson. Every cup was a conversation. And slowly,
+                        the street became a community. That's the <strong>Lavos way</strong> —
+                        building something real, one pour at a time.
+                    </p>
+                </div>
+
+                <div class="story-timeline">
+                    <div class="timeline-item">
+                        <div class="icon"><i class="fas fa-store-alt"></i></div>
+                        <div class="content">
+                            <h4>Day 1 · The Cart</h4>
+                            <p>A folding table, a thermos, and a dream. First cup served at 6:17 AM.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="icon"><i class="fas fa-handshake"></i></div>
+                        <div class="content">
+                            <h4>Week 6 · The Regulars</h4>
+                            <p>Faces became familiar. Names turned into stories. The cart felt like home.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="icon"><i class="fas fa-fire"></i></div>
+                        <div class="content">
+                            <h4>Month 4 · The Fire</h4>
+                            <p>Late nights, early mornings. Burned batches and broken mugs — but never the spirit.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="icon"><i class="fas fa-mug-saucer"></i></div>
+                        <div class="content">
+                            <h4>Now · The Vision</h4>
+                            <p>From street corner to brand. Lavos is a story of grit, grace, and great coffee.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OFFERINGS -->
+        <section class="offerings" id="offerings">
+            <div class="container">
+                <p class="section-label"><i class="fas fa-cup-togo" style="margin-right:8px;"></i> What we offer</p>
+                <h2 class="section-title">
+                    Crafted with <em>intention</em>
+                </h2>
+
+                <div class="offer-grid">
+                    <div class="offer-card">
+                        <div class="icon"><i class="fas fa-mug-hot"></i></div>
+                        <h4>Street Brew</h4>
+                        <p>Our signature blend — bold, balanced, and brewed with the same love we started with.</p>
+                    </div>
+                    <div class="offer-card">
+                        <div class="icon"><i class="fas fa-bread-slice"></i></div>
+                        <h4>Fresh Bakes</h4>
+                        <p>Muffins &amp; scones baked daily. Golden, buttery, and the perfect companion to your cup.</p>
+                    </div>
+                    <div class="offer-card">
+                        <div class="icon"><i class="fas fa-seedling"></i></div>
+                        <h4>Sustainably Sourced</h4>
+                        <p>We work directly with small farms. Great coffee shouldn't cost the earth.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISION / QUOTE -->
+        <section class="vision" id="vision">
+            <p class="section-label" style="text-align:center;"><i class="fas fa-quote-left" style="margin-right:8px;"></i> The vision</p>
+            <blockquote>
+                "We didn't wait for a shop. We built a feeling first — and the feeling found its home."
+            </blockquote>
+            <div class="attribution">
+                <i class="fas fa-feather-pointed"></i> — Lavos, the brand born from the street
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <span class="copy">
+                <i class="fas fa-mug-hot"></i> Lavos · 2026 &mdash; built with <i class="fas fa-heart" style="color:#c9a87c;"></i> from the ground up
+            </span>
+            <div class="socials">
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /container -->
+
+</body>
+</html>
